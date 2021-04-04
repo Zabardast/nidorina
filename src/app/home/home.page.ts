@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DataService, Message } from '../services/data.service';
+import { DataService, Task } from '../services/data.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +7,14 @@ import { DataService, Message } from '../services/data.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  constructor(private data: DataService) {}
+
+  public _tasks: Task[] 
+
+  constructor(private data: DataService) {
+    this.data.init().then(()=>{
+      this.getTasks();
+    })
+  }
 
   refresh(ev) {
     setTimeout(() => {
@@ -15,8 +22,11 @@ export class HomePage {
     }, 3000);
   }
 
-  getMessages(): Message[] {
-    return this.data.getMessages();
+  getTasks() {
+    this.data.getTasks().then((val)=>{
+      this._tasks = val;
+      console.log("what is the task: ", val)
+    });
   }
 
 }

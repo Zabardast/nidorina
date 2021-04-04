@@ -1,83 +1,70 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
-export interface Message {
-  fromName: string;
-  subject: string;
-  date: string;
-  id: number;
-  read: boolean;
+export interface Task {
+  name: string;
+  text: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  public messages: Message[] = [
-    {
-      fromName: 'Matt Chorsey',
-      subject: 'New event: Trip to Vegas',
-      date: '9:32 AM',
-      id: 0,
-      read: false
-    },
-    {
-      fromName: 'Lauren Ruthford',
-      subject: 'Long time no chat',
-      date: '6:12 AM',
-      id: 1,
-      read: false
-    },
-    {
-      fromName: 'Jordan Firth',
-      subject: 'Report Results',
-      date: '4:55 AM',
-      id: 2,
-      read: false
-    },
-    {
-      fromName: 'Bill Thomas',
-      subject: 'The situation',
-      date: 'Yesterday',
-      id: 3,
-      read: false
-    },
-    {
-      fromName: 'Joanne Pollan',
-      subject: 'Updated invitation: Swim lessons',
-      date: 'Yesterday',
-      id: 4,
-      read: false
-    },
-    {
-      fromName: 'Andrea Cornerston',
-      subject: 'Last minute ask',
-      date: 'Yesterday',
-      id: 5,
-      read: false
-    },
-    {
-      fromName: 'Moe Chamont',
-      subject: 'Family Calendar - Version 1',
-      date: 'Last Week',
-      id: 6,
-      read: false
-    },
-    {
-      fromName: 'Kelly Richardson',
-      subject: 'Placeholder Headhots',
-      date: 'Last Week',
-      id: 7,
-      read: false
-    }
-  ];
 
-  constructor() { }
+  private _storage: Storage | null = null;
+  
+  private _tasks: Task[]
 
-  public getMessages(): Message[] {
-    return this.messages;
+  private _task: Task
+
+  constructor(private storage: Storage)
+  { 
+
+    this._tasks = []
+
+    this.init().then(()=>{
+      this._storage.set("key", "value");
+      // this._storage.set("blablada", "one more time");
+      // this._task = {name: "blasd",text: "text toto"}
+      // this._task.name = "blasd";
+      // this._task.text = "lkjhsdlfg";
+      // this._storage.set("blabla", this._task);
+      // this.getTaskById("blabla").then((val)=>{
+      //   console.log("this is a val: ", val.text)
+      // })
+      // console.log("what are you doing stepsize?", this._storage)
+  })
   }
 
-  public getMessageById(id: number): Message {
-    return this.messages[id];
+  async init()
+  {
+    const storage = await this.storage.create();
+    this._storage = storage;
   }
+
+  //get all tasks
+  public async getTasks(): Promise<Task[]> 
+  {
+    return await this._storage.forEach((value, key, iteration) => {
+      this._task = {name: key, text: value};
+
+      console.log("what iteration? ", iteration)
+      this._tasks.push(this._task);
+    }).then(() => { return this._tasks})
+  }
+
+  //get one task
+  public async getTaskById(id: string): Promise<Task> {
+    return await this._storage.get(id);
+  }
+
+  //add Task
+  public async setTask(name: string, text: string): Promise<any>
+  {
+    return this._storage.set(name, text);
+  }
+
+  //edit task
+  public async editTask(name: string, text: string)
+  {}
 }
