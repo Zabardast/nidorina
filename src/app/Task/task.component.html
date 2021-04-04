@@ -1,0 +1,16 @@
+<ion-item *ngIf="task" [routerLink]="'/task/' + task.name" [detail]="false">
+  <!-- <div slot="start" [class]="!task.read ? 'dot dot-unread' : 'dot'"></div> -->
+  <ion-label class="ion-text-wrap">
+    <h2>
+      {{ task.name }}
+      <!-- <span class="date"> -->
+        <!-- <ion-note>{{ task.date }}</ion-note> -->
+        <!-- <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon> -->
+      <!-- </span> -->
+    </h2>
+    <!-- <h3>{{ task.subject }}</h3> -->
+    <p>
+      {{ task.text }}
+    </p>
+  </ion-label>
+  </ion-item>
