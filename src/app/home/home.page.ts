@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService, Task } from '../services/data.service';
 
 @Component({
@@ -6,14 +6,15 @@ import { DataService, Task } from '../services/data.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  public _tasks: Task[];
 
-  public _tasks: Task[] 
+  constructor(private data: DataService) {}
 
-  constructor(private data: DataService) {
-    this.data.init().then(()=>{
+  ngOnInit() {
+    this.data.storageReady.subscribe(() => {
       this.getTasks();
-    })
+    });
   }
 
   refresh(ev) {
@@ -23,10 +24,9 @@ export class HomePage {
   }
 
   getTasks() {
-    this.data.getTasks().then((val)=>{
+    this.data.getTasks().then((val) => {
       this._tasks = val;
-      console.log("what is the task: ", val)
+      console.log('what is the task: ', val);
     });
   }
-
 }

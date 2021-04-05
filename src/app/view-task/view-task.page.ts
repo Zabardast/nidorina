@@ -12,15 +12,15 @@ export class ViewTaskPage implements OnInit {
   constructor(
     private data: DataService,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.data.init().then(()=>{
+    /* this.data.init().then(()=>{
       const id = this.activatedRoute.snapshot.paramMap.get('id');
       this.data.getTaskById(id).then((val)=>{
         this.task = val;
       })
-    })
+    }) */
   }
 
   getBackButtonText() {
