@@ -26,7 +26,10 @@ export class DataService {
       .create()
       .then((result) => {
         this._storage = result;
-        this._storage.set('blablada', 'one more time');
+        this._storage.set('1', {
+          name: 'ma super tache',
+          text: 'Montrer ma super appli a Clem',
+        });
         this.storageReady.next();
       })
       .catch((e) => console.error('Erreur lors de la création du storage', e));
